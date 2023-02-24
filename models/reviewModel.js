@@ -33,7 +33,7 @@ const reviewSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
-
+// index to restrect user from making many review on the same tour
 reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 
 reviewSchema.pre(/^find/, function (next) {
@@ -44,6 +44,7 @@ reviewSchema.pre(/^find/, function (next) {
   next();
 });
 
+// calculate Average Ratings
 reviewSchema.statics.calcAverageRatings = async function (tourId) {
   const stats = await this.aggregate([
     {
@@ -57,7 +58,6 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
       },
     },
   ]);
-  // console.log(stats);
 
   if (stats.length > 0) {
     await Tour.findByIdAndUpdate(tourId, {
@@ -72,6 +72,7 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
   }
 };
 
+// to call after save
 reviewSchema.post('save', function () {
   // this points to current review
   this.constructor.calcAverageRatings(this.tour);

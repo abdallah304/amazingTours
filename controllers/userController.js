@@ -47,6 +47,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
+// current login user
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();

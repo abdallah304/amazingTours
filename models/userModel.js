@@ -56,6 +56,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+//check if password is updated
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password') || this.isNew) return next();
 
@@ -77,10 +78,12 @@ userSchema.pre(/^find/, function (next) {
   next();
 });
 
+// compare row password and encrypted password by JWT
 userSchema.methods.checkPassword = async (rowPassword, encryptedPassword) => {
   return await bcrypt.compare(rowPassword, encryptedPassword);
 };
 
+// check token expires time
 userSchema.methods.isPasswordChangedAfterToken = function (JWT_iat_time) {
   if (this.changePasswordAt) {
     const passwordTime_in_milliseconds = parseInt(
@@ -92,6 +95,7 @@ userSchema.methods.isPasswordChangedAfterToken = function (JWT_iat_time) {
   return false;
 };
 
+// Create password token to send it into Email to Rest password
 userSchema.methods.createForgetPasswordToken = function () {
   const randomToken = crypto.randomBytes(32).toString('hex');
 
@@ -102,7 +106,6 @@ userSchema.methods.createForgetPasswordToken = function () {
 
   this.passwordRestExpires = Date.now() + 10 * 60 * 1000;
 
-  //console.log(randomToken, this.passwordRestToken, this.passwordRestExpires);
   return randomToken;
 };
 const User = mongoose.model('User', userSchema);

@@ -17,6 +17,7 @@ exports.deleteTour = factory.deleteOne(Tour);
 exports.updateTour = factory.updateOne(Tour);
 exports.getAllTours = factory.getAll(Tour);
 
+// make some aggregations
 exports.getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
     {
@@ -42,6 +43,7 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
   });
 });
 
+// get overview about all tours for specific year
 exports.getToursPlan = catchAsync(async (req, res, next) => {
   const year = req.params.year;
   const toursPlan = await Tour.aggregate([
@@ -86,8 +88,7 @@ exports.getToursPlan = catchAsync(async (req, res, next) => {
   });
 });
 
-// /tours-within/:distance/center/:latlng/unit/:unit
-// /tours-within/233/center/34.111745,-118.113491/unit/mi
+// for Geospatial
 exports.getToursWithin = catchAsync(async (req, res, next) => {
   const { distance, latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
@@ -116,6 +117,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
   });
 });
 
+// for Geospatial
 exports.getDistances = catchAsync(async (req, res, next) => {
   const { latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');

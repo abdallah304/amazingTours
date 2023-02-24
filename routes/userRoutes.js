@@ -3,7 +3,7 @@ const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
 
 const router = express.Router();
-
+// Normal user Routes
 router.route('/signup').post(authController.signUp);
 router.route('/login').post(authController.login);
 router.route('/forgetpassword').post(authController.forgetPassword);

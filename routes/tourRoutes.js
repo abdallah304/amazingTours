@@ -15,6 +15,7 @@ router
     tourController.createTour
   );
 
+// is there is params ID
 router
   .route('/:id')
   .get(tourController.getTour)
@@ -29,14 +30,17 @@ router
     tourController.deleteTour
   );
 
+// get five cheapest tours using Aggregration
 router
   .route('/top-5-cheapest-tours')
   .get(tourController.aliasTopCheapest, tourController.getAllTours);
 
+// only admin can perform this actions, so it check permision middleware
 router.use(authController.checkToken, authController.checkPermissions('admin'));
 router.route('/toursAggregation').get(tourController.getTourStats);
 router.route('/toursPlan/:year').get(tourController.getToursPlan);
 
+// for Geospatial maps
 router
   .route('/tours-within/:distance/center/:latlng/unit/:unit')
   .get(tourController.getToursWithin);

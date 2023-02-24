@@ -17,9 +17,10 @@ const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 
+// set Pug engine
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
 // 1) GLOBAL MIDDLEWARES
+app.set('views', path.join(__dirname, 'views'));
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -52,6 +53,7 @@ app.use(
     ],
   })
 );
+
 // body parser, reading data from the req.body
 app.use(express.json({ limit: '100kb' }));
 app.use(cookieParser());
@@ -67,6 +69,7 @@ app.use((req, res, next) => {
   console.log(req.cookies);
   next();
 });
+
 // 3) ROUTES
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);

@@ -4,7 +4,9 @@ const reviewController = require('./../controllers/reviewController');
 
 const router = express.Router({ mergeParams: true });
 
+// check authentication middleware
 router.use(authcontroller.checkToken);
+
 router
   .route('/')
   .get(authcontroller.checkPermissions('admin'), reviewController.getAllReviews)
@@ -14,6 +16,7 @@ router
     reviewController.createReview
   );
 
+// if there is params ID
 router
   .route('/:id')
   .get(reviewController.getReview)
